@@ -8,11 +8,10 @@
 // 4. Git path
 // 5. Folder name on gd
 // 6. build command
-// gdem use `project`
 // gdem remove `project`
-// gdem update
+// gdem update `name`
 // prompt: ... same as in create but with values
-// gdem publish `master`
+// gdem publish `name` `master`
 // steps:
 // git pull
 // git checkout master
