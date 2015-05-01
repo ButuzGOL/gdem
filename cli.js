@@ -7,6 +7,7 @@ process.bin = process.title = 'gdem';
 var fs = require('fs');
 var program = require('commander');
 var inquirer = require('inquirer');
+var rimraf = require('rimraf');
 
 var pkg = require('./package.json');
 
@@ -64,7 +65,20 @@ function createCommand() {
   });
 }
 
+function remove(name) {
+  rimraf(rootFolderPath + '/' + name, function() {});
+}
 
+function removeCommand(command, name) {
+  inquirer.prompt({
+    type: 'confirm',
+    name: 'confirm',
+    message: 'Are you sure?',
+    default: true
+  }, function(answers) {
+    if (answers.confirm) remove(name);
+  });
+}
 
 createRootFolder();
 
@@ -77,6 +91,6 @@ program
 
 program
   .command('<create>', 'create environment')
-  .action(createCommand);
+  .action(removeCommand);
 
 program.parse(process.argv);
