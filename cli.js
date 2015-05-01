@@ -5,9 +5,11 @@
 process.bin = process.title = 'gdem';
 
 var fs = require('fs');
+var path = require('path');
 var program = require('commander');
 var inquirer = require('inquirer');
 var rimraf = require('rimraf');
+var gdPages = require('gd-pages');
 
 var pkg = require('./package.json');
 
@@ -21,6 +23,12 @@ function createRootFolder() {
   if (!fs.existsSync(rootFolderPath)) {
     fs.mkdirSync(rootFolderPath);
   }
+}
+
+function getDirectories(srcpath) {
+  return fs.readdirSync(srcpath).filter(function(file) {
+    return fs.statSync(path.join(srcpath, file)).isDirectory();
+  });
 }
 
 function create(answers) {
@@ -123,6 +131,18 @@ function updateCommand(command, name) {
   });
 }
 
+function listCommand() {
+  var folders = getDirectories(rootFolderPath);
+
+  if (folders.length) {
+    folders.forEach(function(folder) {
+      console.log('  ' + folder);
+    });
+  } else {
+    console.log('Empty');
+  }
+}
+
 createRootFolder();
 
 program
@@ -130,11 +150,12 @@ program
   .usage('<command> [<args>]');
   // .command('create [name]', 'create environment')
   // .command('remove [name]', 'remove environment')
-  // .command('update', 'update current environment')
+  // .command('update [name]', 'update current environment')
+  // .command('list', 'list of environments')
   // .command('publish [cursor]', 'publish based on cursor (branch, teg, hash)');
 
 program
   .command('<create>', 'create environment')
-  .action(updateCommand);
+  .action(listCommand);
 
 program.parse(process.argv);

@@ -20,6 +20,7 @@
   ],
   "dependencies": {
     "commander": "^2.8.1",
+    "gd-pages": "^1.0.1",
     "inquirer": "^0.8.2",
     "rimraf": "^2.3.3"
   }
