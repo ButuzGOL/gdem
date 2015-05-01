@@ -1,0 +1,21 @@
+{
+  "name": "gdem",
+  "version": "0.0.1",
+  "description": "...",
+  "license": "MIT",
+  "repository": "ButuzGOL/gdem",
+  "author": {
+    "name": "ButuzGOL",
+    "email": "ButuzGOL@gmail.com",
+    "url": "https://butuzgol.github.io"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "..."
+  ]
+}
