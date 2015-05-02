@@ -1,7 +1,7 @@
 {
   "name": "gdem",
   "version": "0.0.1",
-  "description": "...",
+  "description": "Google Drive environments manager",
   "license": "MIT",
   "repository": "ButuzGOL/gdem",
   "author": {
@@ -13,15 +13,27 @@
     "node": ">=0.10.0"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "cli.js",
+    "cmds.js",
+    "config.js",
+    "main.js"
   ],
   "keywords": [
-    "..."
+    "google drive",
+    "environment",
+    "manager",
+    "server",
+    "static",
+    "website",
+    "share"
   ],
   "dependencies": {
     "commander": "^2.8.1",
     "gd-pages": "^1.0.1",
     "inquirer": "^0.8.2",
+    "nodegit": "^0.3.3",
     "rimraf": "^2.3.3"
-  }
+  },
+  "preferGlobal": true
 }
