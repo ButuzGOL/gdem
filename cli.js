@@ -2,12 +2,10 @@
 
 /* global process */
 
-'use stict';
+'use strict';
 
 process.bin = process.title = 'Google Drive environments manager';
 
-var fs = require('fs');
-var path = require('path');
 var program = require('commander');
 
 var pkg = require('./package.json');
@@ -25,7 +23,7 @@ init();
 program
   .version(pkg.version)
   .usage('<command> [<args>]');
-  
+
 program
   .command('list')
   .description('list of environments')
@@ -35,12 +33,12 @@ program
   .command('create')
   .description('create environment')
   .action(cmds.create);
-  
+
  program
   .command('update [name]')
   .description('update environment')
   .action(cmds.update);
-  
+
 program
   .command('remove [name]')
   .description('remove environment')
@@ -48,7 +46,7 @@ program
 
 program
   .command('publish [name] [cursor]')
-  .description('publish based on cursor (branch, teg, hash)')
+  .description('publish based on cursor (branch, tag, hash)')
   .action(cmds.publish);
-  
+
 program.parse(process.argv);

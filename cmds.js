@@ -2,6 +2,7 @@
 
 var inquirer = require('inquirer');
 
+var log = require('./log');
 var gdem = require('./');
 
 module.exports = {
@@ -20,7 +21,13 @@ module.exports = {
     inquirer.prompt([{
       type: 'input',
       name: 'name',
-      message: 'Name'
+      message: 'Name',
+      validate: function(value) {
+        var envs = gdem.list();
+        if (envs.indexOf(value) === -1) return true;
+
+        return 'This env name already taken';
+      }
     }, {
       type: 'input',
       name: 'serviceAccountEmail',
@@ -36,7 +43,8 @@ module.exports = {
     }, {
       type: 'input',
       name: 'buildCommand',
-      message: 'Build command'
+      message: 'Build command',
+      default: 'sh build.sh'
     }, {
       type: 'input',
       name: 'buildDir',
@@ -44,11 +52,15 @@ module.exports = {
       default: 'dist'
     }], function(answers) {
       gdem.save(answers.name, answers, true);
+
+      log.success('Env created');
     });
   },
   update: function(name) {
     var data = gdem.getData(name);
-    
+
+    if (!data) return log.error('Env not found');
+
     inquirer.prompt([{
       type: 'input',
       name: 'serviceAccountEmail',
@@ -76,6 +88,8 @@ module.exports = {
       default: data.buildDir
     }], function(answers) {
       gdem.save(name, answers);
+
+      log.success('Env updated');
     });
   },
   remove: function(name) {
@@ -85,10 +99,17 @@ module.exports = {
       message: 'Are you sure?',
       default: true
     }, function(answers) {
-      if (answers.confirm) gdem.remove(name);
+      if (answers.confirm) {
+        gdem.remove(name)
+          .then(
+            log.success.bind(log, 'Env removed'),
+            log.error.bind(log, 'Env not found')
+          );
+      }
     });
   },
   publish: function(name, cursor) {
+    if (!name || !cursor) return log.error('should be two args');
     gdem.publish(name, cursor);
   }
 };

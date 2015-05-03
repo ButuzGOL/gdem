@@ -1,5 +1,5 @@
 /* global Promise */
-'use stict';
+'use strict';
 
 var fs = require('fs');
 var path = require('path');
@@ -9,6 +9,7 @@ var git = require('simple-git');
 
 var config = require('./config');
 var utils = require('./utils');
+var log = require('./log');
 
 var exec = require('child_process').exec;
 
@@ -25,62 +26,71 @@ module.exports = {
       buildCommand: answers.buildCommand,
       buildDir: answers.buildDir
     };
-    
+
     if (isNew) fs.mkdirSync(envDir);
-  
+
     fs.writeFileSync(envDir + '/.gdem', JSON.stringify(data, null, 2));
   },
   remove: function(name) {
-    rimraf(path.join(config.rootDir, name), function() {});
+    return new Promise(function(resolve, reject) {
+      if (!this.getData(name)) reject(null);
+
+      rimraf(path.join(config.rootDir, name), function(err) {
+        if (err) return reject(err);
+
+        resolve();
+      });
+    }.bind(this));
   },
   publish: function(name, cursor) {
     var data = this.getData(name);
     var envDir = path.join(config.rootDir, name);
     var repoDir = path.join(envDir, 'repo');
-    
+
     var cloneOrExists = function() {
       return new Promise(function(resolve, reject) {
         if (fs.existsSync(repoDir)) return resolve();
-        
+
         git().clone(data.gitPath, repoDir, function(err) {
-          if (err) return reject();
+          if (err) return reject(err);
 
           resolve();
         });
       });
     };
-    
+
     var pull = function() {
      return new Promise(function(resolve, reject) {
         git
           .checkout('master')
           .pull(function(err) {
-            if (err) return reject();
+            if (err) return reject(err);
             resolve();
           });
       });
     };
-    
+
     var checkout = function(cursor) {
       return new Promise(function(resolve, reject) {
         git.checkout(cursor, function(err) {
-          if (err) return reject();
+          if (err) return reject(err);
           resolve();
         });
       });
     };
-    
+
     var runBuildCommand = function() {
       return new Promise(function(resolve, reject) {
-        exec('cd ' + repoDir + ' && ' + data.buildCommand, function(err, stdout, stderr) {
-          if (err) return reject(err);
-          
-          console.log(stdout, stderr);
-          resolve();
-        });
+        exec('cd ' + repoDir + ' && ' + data.buildCommand,
+          function(err, stdout, stderr) {
+            if (err) return reject(err);
+
+            console.log(stdout, stderr);
+            resolve();
+          });
       });
     };
-    
+
     var publishToGD = function() {
       return gdPages(
         data.serviceAccountEmail,
@@ -90,13 +100,13 @@ module.exports = {
 //        [name, cursor].join('/')
       );
     };
-    
+
     cloneOrExists()
       .then(function() {
-        console.log('Repo ready');
-        
+        log.success('Repo ready');
+
         git = git(repoDir);
-        
+
         console.log('Pull...');
         return pull();
       })
@@ -113,11 +123,15 @@ module.exports = {
         return publishToGD();
       })
       .catch(function(err) {
-        console.log('Error: %s', err);
+        log.error('Error: ' + err);
       });
   },
   getData: function(name) {
     var envDir = path.join(config.rootDir, name);
-    return JSON.parse(fs.readFileSync(path.join(envDir, '.gdem')));
-  }  
+    try {
+      return JSON.parse(fs.readFileSync(path.join(envDir, '.gdem')));
+    } catch(e) {
+      return null;
+    }
+  }
 };
