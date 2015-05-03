@@ -37,6 +37,11 @@ module.exports = {
       type: 'input',
       name: 'buildCommand',
       message: 'Build command'
+    }, {
+      type: 'input',
+      name: 'buildDir',
+      message: 'Build directory',
+      default: 'dist'
     }], function(answers) {
       gdem.save(answers.name, answers, true);
     });
@@ -64,6 +69,11 @@ module.exports = {
       name: 'buildCommand',
       message: 'Build command',
       default: data.buildCommand
+    }, {
+      type: 'input',
+      name: 'buildDir',
+      message: 'Build directory',
+      default: data.buildDir
     }], function(answers) {
       gdem.save(name, answers);
     });
