@@ -96,8 +96,8 @@ module.exports = {
         data.serviceAccountEmail,
         data.pathToKeyFile,
         path.join(repoDir, data.buildDir),
-        'env'
-//        [name, cursor].join('/')
+        name,
+        cursor
       );
     };
 
