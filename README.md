@@ -8,6 +8,9 @@ Inspired by [Google Drive pages](https://github.com/ButuzGOL/gd-pages) and [Host
 $ sudo npm install --save gdem
 ```
 
+## Creating a Service Account using the Google Developers Console
+Take a look [Tutorial](https://github.com/ButuzGOL/gd-pages#creating-a-service-account-using-the-google-developers-console)
+
 ## Usage
 
 ```
