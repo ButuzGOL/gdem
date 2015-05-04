@@ -1,6 +1,6 @@
 {
   "name": "gdem",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Google Drive environments manager",
   "license": "MIT",
   "repository": "ButuzGOL/gdem",
@@ -11,6 +11,9 @@
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "bin": {
+    "gdem": "./cli.js"
   },
   "files": [
     "index.js",
