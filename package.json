@@ -26,7 +26,8 @@
     "server",
     "static",
     "website",
-    "share"
+    "share",
+    "git"
   ],
   "dependencies": {
     "chalk": "^1.0.0",
