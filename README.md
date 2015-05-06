@@ -5,7 +5,7 @@ Inspired by [Google Drive pages](https://github.com/ButuzGOL/gd-pages) and [Host
 ## Install
 
 ```sh
-$ sudo npm install --save gdem
+$ sudo npm install -g gdem
 ```
 
 ## Creating a Service Account using the Google Developers Console
